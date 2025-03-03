@@ -1,0 +1,54 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+"""newsArticle"""
+type NewsArticle {
+  _id: ID!
+  description: String
+  publishedDate: String!
+  job: String!
+  url: String!
+  context: String!
+  location: String!
+  salary: String!
+  company: String!
+  topics: [String!]!
+  boss_info: String
+  keywords: String
+  original_context: String!
+}
+
+type Query {
+  findArticlebyid(id: String!): NewsArticle!
+  findurlarray(urls: [String!]!): [NewsArticle!]!
+  findall(skip: Int! = 0, take: Int! = 300): [NewsArticle!]!
+  findbytopic(topic: String!, skip: Int! = 0, take: Int! = 300): [NewsArticle!]!
+  findbyCV(filename: String!, filetype: String!): [NewsArticle!]!
+}
+
+type Mutation {
+  addArticle(newinputdata: NewsArticleInput!): NewsArticle!
+  removeArticle(id: String!): Boolean!
+}
+
+input NewsArticleInput {
+  description: String
+  publishedDate: String! = "很新的信息"
+  job: String!
+  url: String!
+  context: String!
+  location: String!
+  salary: String!
+  company: String!
+  topics: [String!]! = []
+  boss_info: String
+  keywords: String
+  original_context: String!
+}
+
+type Subscription {
+  recipeAdded: NewsArticle!
+}
