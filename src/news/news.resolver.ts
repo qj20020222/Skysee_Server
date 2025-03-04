@@ -164,7 +164,7 @@ export class NewsArticleResolver {
       
       // 筛选出 score 大于 0.7 的文章
       const highScoreArticles = results
-        .filter((result) => result.score !== null && result.score > 0.9)
+        .filter((result) => result.score !== null && result.score > 0.85)
         .map((result) => result.article);
       console.log('成功', highScoreArticles);
       return highScoreArticles;

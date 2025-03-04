@@ -21,7 +21,6 @@ async function bootstrap() {
     credentials: true, // 如果需要发送 cookies
   });
   
-  await app.listen(3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  app.listen(3000, '0.0.0.0', () => { console.log('Server is running on port 3000'); });
 }
 bootstrap();
