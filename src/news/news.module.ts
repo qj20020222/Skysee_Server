@@ -7,7 +7,7 @@ import { FileController } from './Upload-File.controller';
 import { S3Service } from './s3.service';
 @Module({
   imports: [MongooseModule.forFeature([{ name: NewsArticle.name, schema: NewsArticleSchema}])],
-  providers: [NewsArticleService, NewsArticleResolver, S3Service],
+  providers: [NewsArticleService, NewsArticleResolver],
   controllers:[FileController],
 })
 export class NewsArticleModule {}
