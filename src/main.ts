@@ -5,10 +5,11 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 
+dotenv.config({ path: ".env" });
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  dotenv.config();
+
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/files',  // 这个前缀很重要
   });
@@ -25,3 +26,4 @@ async function bootstrap() {
   app.listen(3000, '0.0.0.0', () => { console.log('Server is running on port 3000'); });
 }
 bootstrap();
+

@@ -15,14 +15,37 @@ import { CustomFileValidator } from './FileValidator/fileValidator';
 import { promises as fs } from 'fs';
 import { diskStorage } from 'multer'; // Import diskStorage
 import * as path from 'path'; // Import the path module
+import { S3Service } from 'src/news/s3.service';
+import { S3Client } from '@aws-sdk/client-s3';
+import * as multerS3 from 'multer-s3';
 
 @Controller()
 export class FileController {
+  private s3Client: S3Client;
+  private readonly bucketName = 'your-bucket-name';
+constructor() {
+  // 初始化 S3 客户端
+  this.s3Client = new S3Client({
+    region: 'us-east-1', // 例如 'us-east-1'
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+    },
+  });
+}
 
 @Post('upload')
 @UseInterceptors(FileInterceptor('file', {
-  storage: diskStorage({
-    destination: './uploads', // Specify the destination directory
+  storage:  multerS3({
+    s3: new S3Client({
+      region: 'us-east-1', // 例如 'us-east-1'
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+      },
+    }),
+    bucket: 'us-east-1',
+    contentType: multerS3.AUTO_CONTENT_TYPE, // Specify the destination directory
     filename: (req, file, cb) => {
       const decodedName = decodeURIComponent(file.originalname);
       // Generate a unique filename (optional, but recommended)
@@ -64,3 +87,5 @@ export class FileController {
 };
 }
 }
+
+

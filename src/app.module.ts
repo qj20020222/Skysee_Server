@@ -20,8 +20,7 @@ import { FileController } from './news/Upload-File.controller';
     MulterModule.registerAsync({
       imports: [ConfigModule],
       
-      useFactory: async (configService: ConfigService) => ({
-        
+      useFactory: async (configService: ConfigService) => ({       
         storage: multer.diskStorage({
           destination: (req, file, callback) => {
             const uploadPath = configService.get<string>('UPLOAD_PATH');
