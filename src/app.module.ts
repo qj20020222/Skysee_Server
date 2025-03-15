@@ -17,7 +17,7 @@ import { FileController } from './news/Upload-File.controller';
       isGlobal: true, // 使 ConfigService 全局可用
     }),
 
-    MulterModule.registerAsync({
+  /*  MulterModule.registerAsync({
       imports: [ConfigModule],
       
       useFactory: async (configService: ConfigService) => ({       
@@ -45,7 +45,7 @@ import { FileController } from './news/Upload-File.controller';
         },
       }),
       inject: [ConfigService],
-    }),
+    }), */
     
     NewsArticleModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
