@@ -12,6 +12,7 @@ import axios from 'axios';
 import { ObjectId } from 'mongoose';
 import { ApolloError } from 'apollo-server-express';
 import * as path from 'path';
+import { buffer } from 'stream/consumers';
 const pubSub = new PubSub();
 
 @Resolver(of => NewsArticle)
@@ -82,7 +83,7 @@ export class NewsArticleResolver {
 
     @Query(returns => [NewsArticle])
     async findbyCV(
-      @Args('filename') filename: string,
+      @Args('filename') fileurl: string,
       @Args('filetype') filetype: string,
     ): Promise<NewsArticle[]> {
       const allArticles = await this.NewsArticleService.findAllwithoutArg();
@@ -91,18 +92,21 @@ export class NewsArticleResolver {
       let extractedText = '';
       try {
         if (filetype === 'application/pdf') {
-          const filepath = path.join(process.cwd(), 'uploads', filename);
-          console.log("Absolute filepath:", filepath);         
-          const dataBuffer = await fs.readFile(filepath);    
-          const data = await pdf(dataBuffer);
+          console.log("Absolute filepath:", fileurl);  
+          const response = await axios.get(fileurl, {
+            responseType: 'arraybuffer' // 必须指定返回类型为 arraybuffer
+          });          
+          const data = await pdf(response.data);
           console.log("data:", data);
           extractedText = data.text;        
         } else if (
           filetype ===
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ) {
-          const filepath = path.join(process.cwd(), 'uploads', filename);
-          const result = await mammoth.extractRawText({ path: filepath });
+          const response = await axios.get(fileurl, {
+            responseType: 'arraybuffer' // 必须指定返回类型为 arraybuffer
+          }); 
+          const result = await mammoth.extractRawText({ buffer:response.data });
           extractedText = result.value;
         }
       } catch (error) {
