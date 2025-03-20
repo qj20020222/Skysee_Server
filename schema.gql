@@ -26,7 +26,7 @@ type Query {
   findurlarray(urls: [String!]!): [NewsArticle!]!
   findall(skip: Int! = 0, take: Int! = 300): [NewsArticle!]!
   findbytopic(topic: String!, skip: Int! = 0, take: Int! = 300): [NewsArticle!]!
-  findbyCV(filename: String!, filetype: String!): [NewsArticle!]!
+  findbyCV(fileurl: String!, filetype: String!): [NewsArticle!]!
 }
 
 type Mutation {
