@@ -96,7 +96,6 @@ constructor() {
    file: {
     originalname: file.originalname,
     filename: file.filename,
-    path: file.path,
     size: file.size,
     mimetype: file.mimetype,
     url:presignedUrl

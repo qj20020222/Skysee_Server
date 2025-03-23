@@ -83,7 +83,7 @@ export class NewsArticleResolver {
 
     @Query(returns => [NewsArticle])
     async findbyCV(
-      @Args('filename') fileurl: string,
+      @Args('fileurl') fileurl: string,
       @Args('filetype') filetype: string,
     ): Promise<NewsArticle[]> {
       const allArticles = await this.NewsArticleService.findAllwithoutArg();

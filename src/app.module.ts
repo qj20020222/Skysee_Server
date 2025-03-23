@@ -11,6 +11,7 @@ import  { ConfigModule, ConfigService} from '@nestjs/config';
 import * as multer from 'multer';
 import { extname } from 'path';
 import { FileController } from './news/Upload-File.controller';
+import { AIModule } from './ai/ai.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -75,9 +76,8 @@ import { FileController } from './news/Upload-File.controller';
           return connection;
         },
       }),
-    }),
-   
- 
+    }),   
+    AIModule
   ],
 })
 export class AppModule {}
