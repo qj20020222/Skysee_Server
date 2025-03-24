@@ -32,7 +32,7 @@ export class NewsArticle {
   @Prop({ type: String, required: true })
   company: string;
 
-  @Prop({ type: MongooseSchema.Types.Mixed })
+  @Prop({ type: [String]})
   topics:string[];
 
   @Prop({ type: String, required: false }) 

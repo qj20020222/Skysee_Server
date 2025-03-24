@@ -12,6 +12,7 @@ import * as multer from 'multer';
 import { extname } from 'path';
 import { FileController } from './news/Upload-File.controller';
 import { AIModule } from './ai/ai.module';
+import { DeepSeekService } from './ai/ai.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -79,5 +80,7 @@ import { AIModule } from './ai/ai.module';
     }),   
     AIModule
   ],
+  providers:[DeepSeekService],
+  exports:[DeepSeekService]
 })
 export class AppModule {}

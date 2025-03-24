@@ -17,15 +17,25 @@ export class AIController {
     result.pipeDataStreamToResponse(res);
   }
 
-  @Post('/stream-data')
-  async streamData(@Res() res: Response, @Body() requestData: Request,) {
-    const {context}:{context:string} = await requestData.json();
+  @Post('/ai-generate')
+  async streamData(@Body() body: any) {
+    try {
+      const { originalcontext, keywords } = body;
+      const result = await generateText({
+        model: deepseek('deepseek-chat'),
+        prompt: `${originalcontext}${keywords}\n\n根据这份岗位的要求, 薪资等信息评估一下这份工作`,
+      });
+      console.log('originalcontext:',originalcontext);
+      console.log('generateText result type:', typeof result);
+      const textContent = result.text || JSON.stringify(result);
 
-    const result = await generateText({
-          model: deepseek('deepseek-chat'),
-          prompt:  `${context}\n\n根据这份岗位的要求, 薪资等信息评估一下这份工作`,
-    });
-
-    return Response.json({result});
+      return { text: textContent };
+    } catch (error) {
+      console.error('Error generating text:', error);
+      return {
+        error: 'Failed to generate text. Please try again later.',
+        details: error.message
+      };
+    }
   }
 }
