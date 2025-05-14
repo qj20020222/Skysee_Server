@@ -24,26 +24,28 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class FileController {
   private s3Client: S3Client;
   private readonly bucketName = 'skyseeresume';
-
-constructor() {
+  
+  constructor() {
+    console.log('AWS_ACCESS_KEY_ID:', process.env.AWS_ACCESS_KEY_ID);
+    console.log('AWS_SECRET_ACCESS_KEY:', process.env.AWS_SECRET_ACCESS_KEY);
   // 初始化 S3 客户端
-  this.s3Client = new S3Client({
+    this.s3Client = new S3Client({
     region: 'us-east-1', // 例如 'us-east-1'
     credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-    },
-  });
-}
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+     },
+    });
+  }
 
-@Post('upload')
-@UseInterceptors(FileInterceptor('file', {
-  storage:  multerS3({
+   @Post('upload')
+   @UseInterceptors(FileInterceptor('file', {
+   storage:  multerS3({
     s3: new S3Client({
       region: 'us-east-1', // 例如 'us-east-1'
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
       },
     }),
     bucket: 'skyseeresume',
@@ -66,8 +68,8 @@ constructor() {
       const filename = filename1.replace(" ", "-");
       cb(null, `uploads/${filename}`);
     }
-  }),
-}))
+     }),
+  }))
  async uploadFile(
   @UploadedFile(
     new ParseFilePipe({
@@ -92,7 +94,7 @@ constructor() {
 
   const presignedUrl = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
   console.log('filename', file.filename);
- return{
+  return{
    file: {
     originalname: file.originalname,
     filename: file.filename,

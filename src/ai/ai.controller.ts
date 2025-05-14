@@ -23,7 +23,7 @@ export class AIController {
       const { originalcontext, keywords } = body;
       const result = await generateText({
         model: deepseek('deepseek-chat'),
-        prompt: `${originalcontext}${keywords}\n\n根据这份岗位的要求, 薪资等信息评估一下这份工作`,
+        prompt: `${originalcontext}${keywords}\n\n根据这份岗位的要求, 薪资等信息评估一下这份工作, 用英文表达, 注意格式化`,
       });
       console.log('originalcontext:',originalcontext);
       console.log('generateText result type:', typeof result);

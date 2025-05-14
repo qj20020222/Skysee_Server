@@ -145,7 +145,7 @@ export class NewsArticleResolver {
             console.error(
               `文章ID ${article.id} Axios 请求错误: ${error.message}`,
               {
-                url: 'http://192.168.99.182:5000/api/function',
+                url: 'http://192.168.99.122:5000/api/function',
                 params: { param1: article.original_context, param2: extractedText },
                 responseStatus: error.response?.status,
                 responseData: error.response?.data.results,
