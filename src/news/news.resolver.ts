@@ -92,8 +92,8 @@ export class NewsArticleResolver {
       let extractedText = '';
       try {
         if (filetype === 'application/pdf') {
-          const filepath = path.join(process.cwd(), 'uploads', filename);
-          console.log("Absolute filepath:", filepath);         
+          console.log("article context", allArticles[0].original_context)
+          const filepath = path.join(process.cwd(), 'uploads', filename);        
           const dataBuffer = await fs.readFile(filepath);    
           const data = await pdf(dataBuffer);
           console.log("data:", data);
