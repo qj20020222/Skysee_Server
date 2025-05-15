@@ -5,10 +5,10 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 
-//dotenv.config();
+ dotenv.config();
 
 async function bootstrap() {
-  dotenv.config();
+
   console.log('AWS_ACCESS_KEY_ID:', process.env.AWS_ACCESS_KEY_ID);
   console.log('AWS_SECRET_ACCESS_KEY:', process.env.AWS_SECRET_ACCESS_KEY);
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

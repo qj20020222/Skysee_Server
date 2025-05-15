@@ -83,7 +83,7 @@ export class NewsArticleResolver {
 
     @Query(returns => [NewsArticle])
     async findbyCV(
-      @Args('fileurl') fileurl: string,
+      @Args('filename') filename: string,
       @Args('filetype') filetype: string,
     ): Promise<NewsArticle[]> {
       const allArticles = await this.NewsArticleService.findAllwithoutArg();
@@ -92,21 +92,18 @@ export class NewsArticleResolver {
       let extractedText = '';
       try {
         if (filetype === 'application/pdf') {
-          console.log("Absolute filepath:", fileurl);  
-          const response = await axios.get(fileurl, {
-            responseType: 'arraybuffer' // 必须指定返回类型为 arraybuffer
-          });          
-          const data = await pdf(response.data);
+          const filepath = path.join(process.cwd(), 'uploads', filename);
+          console.log("Absolute filepath:", filepath);         
+          const dataBuffer = await fs.readFile(filepath);    
+          const data = await pdf(dataBuffer);
           console.log("data:", data);
           extractedText = data.text;        
         } else if (
           filetype ===
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ) {
-          const response = await axios.get(fileurl, {
-            responseType: 'arraybuffer' // 必须指定返回类型为 arraybuffer
-          }); 
-          const result = await mammoth.extractRawText({ buffer:response.data });
+          const filepath = path.join(process.cwd(), 'uploads', filename);
+          const result = await mammoth.extractRawText({ path: filepath });
           extractedText = result.value;
         }
       } catch (error) {
@@ -128,7 +125,7 @@ export class NewsArticleResolver {
       const articlePromises = allArticles.slice(0,400).map(async (article) => {
         try {
           const response = await axios.post(
-            'http://192.168.99.182:5000/api/function',
+            'http://localhost:5000/api/function',
             {
               param1: article.original_context,
               param2: extractedText,
@@ -145,7 +142,7 @@ export class NewsArticleResolver {
             console.error(
               `文章ID ${article.id} Axios 请求错误: ${error.message}`,
               {
-                url: 'http://192.168.99.122:5000/api/function',
+                url: 'http://localhost:5000/api/function',
                 params: { param1: article.original_context, param2: extractedText },
                 responseStatus: error.response?.status,
                 responseData: error.response?.data.results,
@@ -168,7 +165,7 @@ export class NewsArticleResolver {
       
       // 筛选出 score 大于 0.7 的文章
       const highScoreArticles = results
-        .filter((result) => result.score !== null && result.score > 0.85)
+        .filter((result) => result.score !== null && result.score > 0.8)
         .map((result) => result.article);
       console.log('成功', highScoreArticles);
       return highScoreArticles;
