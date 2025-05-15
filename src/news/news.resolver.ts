@@ -92,7 +92,7 @@ export class NewsArticleResolver {
       let extractedText = '';
       try {
         if (filetype === 'application/pdf') {
-          console.log("article context", allArticles[0].original_context)
+          console.log("article context", allArticles)
           const filepath = path.join(process.cwd(), 'uploads', filename);        
           const dataBuffer = await fs.readFile(filepath);    
           const data = await pdf(dataBuffer);
